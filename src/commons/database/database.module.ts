@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmCoreModule } from '@nestjs/typeorm/dist/typeorm-core.module';
 import { ConfigService } from '@nestjs/config';
 import { ConfigApp, EnvironmentEnum } from '../config/configApp';
 import { ConfigDatabase } from '../config/database.config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 
 @Module({
   imports: [
-    TypeOrmCoreModule.forRootAsync({
+    TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const appConfig = configService.get<ConfigApp>('app');
@@ -34,4 +35,8 @@ import { ConfigDatabase } from '../config/database.config';
     }),
   ],
 })
-export class DatabaseModule {}
+export class DatabaseModule {
+  static forFeature(entities: EntityClassOrSchema[]) {
+    return TypeOrmModule.forFeature(entities);
+  }
+}

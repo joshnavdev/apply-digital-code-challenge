@@ -3,12 +3,13 @@ import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { validationSchema } from './validationSchema';
 import AppConfig from './configApp';
 import DatabaseConfig from './database.config';
+import ContentfulConfig from './contentful.config';
 
 @Module({
   imports: [
     NestConfigModule.forRoot({
       isGlobal: true,
-      load: [AppConfig, DatabaseConfig],
+      load: [AppConfig, DatabaseConfig, ContentfulConfig],
       validationSchema,
     }),
   ],
