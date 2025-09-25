@@ -1,5 +1,5 @@
-import { OriginalProductDto } from '../dtos/originalProduct.dto';
+import { OriginalProduct } from '../dtos/originalProduct';
 
 export interface ContentfulService {
-  getOriginalProducts(): Promise<OriginalProductDto[]>;
+  getOriginalProducts(): Promise<OriginalProduct[]>;
 }

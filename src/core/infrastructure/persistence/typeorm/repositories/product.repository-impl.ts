@@ -4,7 +4,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductOrmEntity } from '../entities/product.orm-entity';
-import { OriginalProductDto } from '../../../../domain/dtos/originalProduct.dto';
+import { OriginalProduct } from '../../../../domain/dtos/originalProduct';
+import { ProductQuery } from '../../../../domain/dtos/productQuery';
 
 @Injectable()
 export class ProductRepositoryImpl implements ProductRepository {
@@ -14,7 +15,7 @@ export class ProductRepositoryImpl implements ProductRepository {
     return this.repo.findOneBy({ sku });
   }
 
-  save(product: OriginalProductDto): Promise<ProductEntity> {
+  save(product: OriginalProduct): Promise<ProductEntity> {
     const productEntity = this.repo.create(product);
     return this.repo.save(productEntity);
   }
@@ -25,5 +26,42 @@ export class ProductRepositoryImpl implements ProductRepository {
     if (!preloadedProduct) throw new Error(`Product with ID ${product.id} not found`);
 
     return this.repo.save(preloadedProduct);
+  }
+
+  async list(query: ProductQuery): Promise<{ data: ProductEntity[]; total: number }> {
+    const q = this.repo.createQueryBuilder('p').orderBy('p.createdAt', 'DESC');
+
+    const { minPrice, maxPrice, name, page, pageSize, minStock, ...stringQuery } = query;
+
+    Object.keys(stringQuery).forEach((key) => {
+      const val = stringQuery[key as keyof typeof stringQuery];
+
+      if (!val) return;
+
+      q.andWhere(`p.${key} ILIKE :${key}`, { [key]: val });
+    });
+
+    if (name) {
+      q.andWhere('p.name ILIKE :name', { name: `%${name}%` });
+    }
+
+    if (minPrice) {
+      q.andWhere('p.price >= :minPrice', { minPrice });
+    }
+
+    if (maxPrice) {
+      q.andWhere('p.price <= :maxPrice', { maxPrice });
+    }
+
+    if (minStock) {
+      q.andWhere('p.stock >= :minStock', { minStock });
+    }
+
+    const [items, count] = await q
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .getManyAndCount();
+
+    return { data: items, total: count };
   }
 }

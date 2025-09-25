@@ -1,4 +1,4 @@
-export interface OriginalProductDto {
+export interface OriginalProduct {
   sku: string;
   name: string;
   brand: string;
@@ -14,5 +14,5 @@ export interface ContentfulResult {
   total: number;
   skip: number;
   limit: number;
-  items: { fields: OriginalProductDto }[];
+  items: { fields: OriginalProduct }[];
 }

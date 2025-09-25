@@ -1,5 +1,5 @@
 import { ContentfulService } from '../../domain/services/contentful.service';
-import { ContentfulResult, OriginalProductDto } from '../../domain/dtos/originalProduct.dto';
+import { ContentfulResult, OriginalProduct } from '../../domain/dtos/originalProduct';
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { catchError, firstValueFrom } from 'rxjs';
@@ -9,7 +9,7 @@ import { AxiosError } from 'axios';
 export class ContentfulServiceImpl implements ContentfulService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getOriginalProducts(): Promise<OriginalProductDto[]> {
+  async getOriginalProducts(): Promise<OriginalProduct[]> {
     const { data } = await firstValueFrom(
       this.httpService.get<ContentfulResult>('', { headers: { 'Content-Type': 'application/json' } }).pipe(
         catchError((error: AxiosError) => {

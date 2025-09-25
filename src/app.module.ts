@@ -6,7 +6,5 @@ import { SchedulingModule } from './core/presentation/scheduling/scheduling.modu
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ProductModule, SchedulingModule],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

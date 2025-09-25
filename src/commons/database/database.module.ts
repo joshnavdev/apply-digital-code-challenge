@@ -30,6 +30,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
           port: databaseConfig.port,
           autoLoadEntities: true,
           synchronize: appConfig.env === EnvironmentEnum.DEV,
+          logging: appConfig.env === EnvironmentEnum.DEV,
         };
       },
     }),
