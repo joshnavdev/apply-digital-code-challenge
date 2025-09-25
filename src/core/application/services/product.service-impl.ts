@@ -2,7 +2,7 @@ import { ProductService } from '../../domain/services/product.service';
 import { ProductEntity } from '../../domain/entities/product.entity';
 import { OriginalProduct } from '../../domain/dtos/originalProduct';
 import { PRODUCT_REPOSITORY } from '../../domain/constants';
-import { ProductRepository } from '../../domain/repositories/producto.repository';
+import { ProductRepository } from '../../domain/repositories/product.repository';
 import { Inject } from '@nestjs/common';
 import { PaginationResponse } from '../../domain/dtos/response';
 import { ProductQuery } from '../../domain/dtos/productQuery';
