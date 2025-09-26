@@ -57,11 +57,25 @@ export class ProductRepositoryImpl implements ProductRepository {
       q.andWhere('p.stock >= :minStock', { minStock });
     }
 
+    q.andWhere('p.isDeleted = :isDeleted', { isDeleted: false });
+
     const [items, count] = await q
       .skip((page - 1) * pageSize)
       .take(pageSize)
       .getManyAndCount();
 
     return { data: items, total: count };
+  }
+
+  findOneById(id: string): Promise<ProductEntity | null> {
+    return this.repo.findOneBy({ id, isDeleted: false });
+  }
+
+  async softDelete(product: ProductEntity): Promise<void> {
+    const preloadedProduct = await this.repo.preload({ ...product, isDeleted: true });
+
+    if (!preloadedProduct) return;
+
+    await this.repo.save(preloadedProduct);
   }
 }

@@ -3,7 +3,7 @@ import { ProductEntity } from '../../domain/entities/product.entity';
 import { OriginalProduct } from '../../domain/dtos/originalProduct';
 import { PRODUCT_REPOSITORY } from '../../domain/constants';
 import { ProductRepository } from '../../domain/repositories/product.repository';
-import { Inject } from '@nestjs/common';
+import { Inject, NotFoundException } from '@nestjs/common';
 import { PaginationResponse } from '../../domain/dtos/response';
 import { ProductQuery } from '../../domain/dtos/productQuery';
 
@@ -40,5 +40,15 @@ export class ProductServiceImpl implements ProductService {
         total,
       },
     };
+  }
+
+  async deleteProduct(id: string): Promise<void> {
+    const product = await this.productRepository.findOneById(id);
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    await this.productRepository.softDelete(product);
   }
 }

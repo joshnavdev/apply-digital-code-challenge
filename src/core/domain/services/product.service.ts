@@ -8,4 +8,5 @@ export interface ProductService {
   updateProduct(product: ProductEntity): Promise<ProductEntity>;
   createProduct(product: OriginalProduct): Promise<ProductEntity>;
   listProducts(filter: ProductQuery): Promise<PaginationResponse<ProductEntity>>;
+  deleteProduct(id: string): Promise<void>;
 }

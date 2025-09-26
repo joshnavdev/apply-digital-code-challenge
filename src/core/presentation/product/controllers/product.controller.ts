@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Query } from '@nestjs/common';
+import { Controller, Delete, Get, Inject, Param, Query, ParseUUIDPipe, HttpStatus, HttpCode } from '@nestjs/common';
 import { PRODUCT_SERVICE } from '../../../domain/constants';
 import { ProductService } from '../../../domain/services/product.service';
 import { ProductQueryDto } from '../dtos/productQuery.dto';
@@ -10,5 +10,11 @@ export class ProductController {
   @Get('')
   getProducts(@Query() query: ProductQueryDto) {
     return this.productService.listProducts(query);
+  }
+
+  @Delete(':productId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  deleteProduct(@Param('productId', new ParseUUIDPipe()) productId: string) {
+    return this.productService.deleteProduct(productId);
   }
 }
