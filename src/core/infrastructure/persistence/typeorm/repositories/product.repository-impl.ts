@@ -11,8 +11,8 @@ import { ProductQuery } from '../../../../domain/dtos/productQuery';
 export class ProductRepositoryImpl implements ProductRepository {
   constructor(@InjectRepository(ProductOrmEntity) private repo: Repository<ProductOrmEntity>) {}
 
-  findOneBySku(sku: string): Promise<ProductEntity | null> {
-    return this.repo.findOneBy({ sku });
+  findOneBySku(sku: string, withDeleted: boolean = false): Promise<ProductEntity | null> {
+    return this.repo.findOne({ where: { sku }, withDeleted });
   }
 
   save(product: OriginalProduct): Promise<ProductEntity> {
@@ -57,8 +57,6 @@ export class ProductRepositoryImpl implements ProductRepository {
       q.andWhere('p.stock >= :minStock', { minStock });
     }
 
-    q.andWhere('p.isDeleted = :isDeleted', { isDeleted: false });
-
     const [items, count] = await q
       .skip((page - 1) * pageSize)
       .take(pageSize)
@@ -68,14 +66,10 @@ export class ProductRepositoryImpl implements ProductRepository {
   }
 
   findOneById(id: string): Promise<ProductEntity | null> {
-    return this.repo.findOneBy({ id, isDeleted: false });
+    return this.repo.findOneBy({ id });
   }
 
   async softDelete(product: ProductEntity): Promise<void> {
-    const preloadedProduct = await this.repo.preload({ ...product, isDeleted: true });
-
-    if (!preloadedProduct) return;
-
-    await this.repo.save(preloadedProduct);
+    await this.repo.softDelete(product.id);
   }
 }

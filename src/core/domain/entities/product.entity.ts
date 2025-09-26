@@ -12,4 +12,5 @@ export interface ProductEntity {
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
+  deletedAt?: Date;
 }

@@ -3,7 +3,7 @@ import { OriginalProduct } from '../dtos/originalProduct';
 import { ProductQuery } from '../dtos/productQuery';
 
 export interface ProductRepository {
-  findOneBySku(sku: string): Promise<ProductEntity | null>;
+  findOneBySku(sku: string, withDeleted: boolean): Promise<ProductEntity | null>;
   save(product: OriginalProduct): Promise<ProductEntity>;
   update(id: string, product: ProductEntity): Promise<ProductEntity>;
   list(query: ProductQuery): Promise<{ data: ProductEntity[]; total: number }>;

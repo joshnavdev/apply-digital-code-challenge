@@ -10,12 +10,12 @@ import { ProductQuery } from '../../domain/dtos/productQuery';
 export class ProductServiceImpl implements ProductService {
   constructor(@Inject(PRODUCT_REPOSITORY) private readonly productRepository: ProductRepository) {}
 
-  getProductBySku(sku: string): Promise<ProductEntity | null> {
-    return this.productRepository.findOneBySku(sku);
+  getProductBySku(sku: string, withDeleted: boolean = false): Promise<ProductEntity | null> {
+    return this.productRepository.findOneBySku(sku, withDeleted);
   }
 
   async createProduct(originalProduct: OriginalProduct): Promise<ProductEntity> {
-    const productFound = await this.productRepository.findOneBySku(originalProduct.sku);
+    const productFound = await this.productRepository.findOneBySku(originalProduct.sku, false);
 
     if (productFound) {
       throw new Error(`Product with SKU ${originalProduct.sku} already exists`);

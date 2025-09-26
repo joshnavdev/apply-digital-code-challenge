@@ -23,10 +23,10 @@ export class SchedulingCron {
 
       for (const originalProduct of originalProducts) {
         try {
-          const productFound = await this.productService.getProductBySku(originalProduct.sku);
+          const productFound = await this.productService.getProductBySku(originalProduct.sku, true);
 
           if (productFound) {
-            if (productFound.isDeleted) continue;
+            if (productFound.deletedAt) continue;
 
             const product = {
               ...productFound,
