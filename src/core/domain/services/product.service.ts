@@ -9,4 +9,8 @@ export interface ProductService {
   createProduct(product: OriginalProduct): Promise<ProductEntity>;
   listProducts(filter: ProductQuery): Promise<PaginationResponse<ProductEntity>>;
   deleteProduct(id: string): Promise<void>;
+  countProducts(withDeleted: boolean): Promise<number>;
+  countDeletedProducts(): Promise<number>;
+  countProductsByRangeDateAndWithPrice(from?: string, to?: string, withPrice?: boolean): Promise<number>;
+  getProductsGroupByCategoryCount(): Promise<{ category: string; count: number }[]>;
 }

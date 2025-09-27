@@ -9,4 +9,8 @@ export interface ProductRepository {
   list(query: ProductQuery): Promise<{ data: ProductEntity[]; total: number }>;
   findOneById(id: string): Promise<ProductEntity | null>;
   softDelete(product: ProductEntity): Promise<void>;
+  count(withDeleted: boolean): Promise<number>;
+  countDeleted(): Promise<number>;
+  countByRangeDateAndWithPrice(from?: string, to?: string, withPrice?: boolean): Promise<number>;
+  groupByCategoryCount(): Promise<{ category: string; count: number }[]>;
 }

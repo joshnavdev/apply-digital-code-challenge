@@ -12,4 +12,6 @@ export const validationSchema = joi.object({
   CONTENTFUL_ENVIRONMENT: joi.string().required(),
   CONTENTFUL_ACCESS_TOKEN: joi.string().required(),
   CONTENTFUL_BASE_URL: joi.string().required(),
+  JWT_SECRET: joi.string().required(),
+  JWT_EXPIRES_IN_SECONDS: joi.number().required(),
 });

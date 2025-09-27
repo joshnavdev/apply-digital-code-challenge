@@ -2,7 +2,7 @@ import { ProductRepository } from '../../../../domain/repositories/product.repos
 import { ProductEntity } from '../../../../domain/entities/product.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, FindOptionsWhere, IsNull, Not, Repository } from 'typeorm';
 import { ProductOrmEntity } from '../entities/product.orm-entity';
 import { OriginalProduct } from '../../../../domain/dtos/originalProduct';
 import { ProductQuery } from '../../../../domain/dtos/productQuery';
@@ -71,5 +71,37 @@ export class ProductRepositoryImpl implements ProductRepository {
 
   async softDelete(product: ProductEntity): Promise<void> {
     await this.repo.softDelete(product.id);
+  }
+
+  count(withDeleted: boolean = false): Promise<number> {
+    return this.repo.count({ withDeleted });
+  }
+
+  countDeleted(): Promise<number> {
+    return this.repo.count({ where: { deletedAt: Not(IsNull()) }, withDeleted: true });
+  }
+
+  countByRangeDateAndWithPrice(from?: string, to?: string, withPrice?: boolean): Promise<number> {
+    const range = from && to ? { createdAt: Between(new Date(from), new Date(to)) } : {};
+
+    let baseWhere: FindOptionsWhere<ProductEntity> = { ...range };
+
+    if (withPrice) {
+      baseWhere = { ...baseWhere, price: Not(IsNull()) };
+    } else {
+      baseWhere = withPrice === false ? { ...baseWhere, price: IsNull() } : baseWhere;
+    }
+
+    return this.repo.count({ where: baseWhere });
+  }
+
+  groupByCategoryCount(): Promise<{ category: string; count: number }[]> {
+    return this.repo
+      .createQueryBuilder('p')
+      .select('p.category', 'category')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('p.category')
+      .orderBy('count', 'DESC')
+      .getRawMany<{ category: string; count: number }>();
   }
 }

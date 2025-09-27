@@ -51,4 +51,20 @@ export class ProductServiceImpl implements ProductService {
 
     await this.productRepository.softDelete(product);
   }
+
+  countProducts(withDeleted: boolean = false): Promise<number> {
+    return this.productRepository.count(withDeleted);
+  }
+
+  countDeletedProducts(): Promise<number> {
+    return this.productRepository.countDeleted();
+  }
+
+  countProductsByRangeDateAndWithPrice(from?: string, to?: string, withPrice?: boolean): Promise<number> {
+    return this.productRepository.countByRangeDateAndWithPrice(from, to, withPrice);
+  }
+
+  getProductsGroupByCategoryCount(): Promise<{ category: string; count: number }[]> {
+    return this.productRepository.groupByCategoryCount();
+  }
 }

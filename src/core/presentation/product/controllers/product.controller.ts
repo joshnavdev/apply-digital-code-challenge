@@ -2,8 +2,10 @@ import { Controller, Delete, Get, Inject, Param, Query, ParseUUIDPipe, HttpStatu
 import { PRODUCT_SERVICE } from '../../../domain/constants';
 import { ProductService } from '../../../domain/services/product.service';
 import { ProductQueryDto } from '../dtos/productQuery.dto';
+import { Public } from '../../auth/decorators/isPublic.decorator';
 
 @Controller('api/products')
+@Public()
 export class ProductController {
   constructor(@Inject(PRODUCT_SERVICE) private readonly productService: ProductService) {}
 

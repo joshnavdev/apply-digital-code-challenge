@@ -1,3 +1,5 @@
 export const CONTENTFUL_SERVICE = Symbol('CONTENTFUL_SERVICE');
 export const PRODUCT_REPOSITORY = Symbol('PRODUCT_REPOSITORY');
 export const PRODUCT_SERVICE = Symbol('PRODUCT_SERVICE');
+export const REPORT_SERVICE = Symbol('REPORT_SERVICE');
+export const REPORT_STRATEGY = Symbol('REPORT_STRATEGY');
