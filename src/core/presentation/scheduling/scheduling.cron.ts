@@ -1,11 +1,11 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ContentfulService } from '../../domain/services/contentful.service';
 import { ProductService } from '../../domain/services/product.service';
 import { CONTENTFUL_SERVICE, PRODUCT_SERVICE } from '../../domain/constants';
 
 @Injectable()
-export class SchedulingCron {
+export class SchedulingCron implements OnModuleInit {
   private readonly logger = new Logger(SchedulingCron.name);
 
   constructor(
@@ -48,5 +48,10 @@ export class SchedulingCron {
     } catch (err) {
       this.logger.error('Error in handleCron', err instanceof Error ? err.stack : 'No stack trace');
     }
+  }
+
+  async onModuleInit() {
+    this.logger.log('Run cron on init');
+    await this.handleCron();
   }
 }
