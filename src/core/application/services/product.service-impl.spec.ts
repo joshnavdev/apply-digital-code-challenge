@@ -22,6 +22,10 @@ describe('ProductServiceImpl', () => {
       list: jest.fn(),
       findOneById: jest.fn(),
       softDelete: jest.fn(),
+      count: jest.fn(),
+      countDeleted: jest.fn(),
+      countByRangeDateAndWithPrice: jest.fn(),
+      groupByCategoryCount: jest.fn(),
     };
     const module = await Test.createTestingModule({
       providers: [ProductServiceImpl, { provide: PRODUCT_REPOSITORY, useValue: mockRepo }],
@@ -134,6 +138,70 @@ describe('ProductServiceImpl', () => {
 
       // Then
       await expect(service.deleteProduct('1')).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('countProducts', () => {
+    it('should count products', async () => {
+      // When
+      productRepository.count.mockResolvedValue(10);
+      const result = await service.countProducts(false);
+
+      // Then
+      expect(result).toBe(10);
+      expect(productRepository.count).toHaveBeenCalledWith(false);
+    });
+
+    it('should count products including deleted', async () => {
+      // When
+      productRepository.count.mockResolvedValue(15);
+      const result = await service.countProducts(true);
+
+      // Then
+      expect(result).toBe(15);
+      expect(productRepository.count).toHaveBeenCalledWith(true);
+    });
+  });
+
+  describe('countDeletedProducts', () => {
+    it('should count deleted products', async () => {
+      // When
+      productRepository.countDeleted.mockResolvedValue(5);
+      const result = await service.countDeletedProducts();
+
+      // Then
+      expect(result).toBe(5);
+      expect(productRepository.countDeleted).toHaveBeenCalled();
+    });
+  });
+
+  describe('countProductsByRangeDateAndWithPrice', () => {
+    it('should count products by date range and price', async () => {
+      // When
+      productRepository.countByRangeDateAndWithPrice.mockResolvedValue(7);
+      const result = await service.countProductsByRangeDateAndWithPrice('2024-01-01', '2024-01-31', true);
+
+      // Then
+      expect(result).toBe(7);
+      expect(productRepository.countByRangeDateAndWithPrice).toHaveBeenCalledWith('2024-01-01', '2024-01-31', true);
+    });
+  });
+
+  describe('getProductsGroupByCategoryCount', () => {
+    it('should group products by category and count', async () => {
+      // Given
+      const groupData = [
+        { category: 'Electronics', count: 3 },
+        { category: 'Books', count: 2 },
+      ];
+
+      // When
+      productRepository.groupByCategoryCount.mockResolvedValue(groupData);
+      const result = await service.getProductsGroupByCategoryCount();
+
+      // Then
+      expect(result).toBe(groupData);
+      expect(productRepository.groupByCategoryCount).toHaveBeenCalled();
     });
   });
 });
