@@ -31,8 +31,8 @@ For more details, check the Swagger documentation at:
 1. Clone the repository:
 
    ```bash
-   git clone <repo-url>
-   cd <repo>
+   git clone https://github.com/joshnavdev/apply-digital-code-challenge
+   cd apply-digital-code-challenge
    ```
 
 2. Create your .env file based on the example and edit it to the correct values:
