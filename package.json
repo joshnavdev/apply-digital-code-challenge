@@ -1,8 +1,12 @@
 {
   "name": "product-service",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "engines": {
+    "node": "22.x",
+    "pnpm": "10.x"
+  },
+  "description": "Product Service for Apply Digital Technical Challenge",
+  "author": "Joshua Navarro <joshua.navarro35@gmail.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -20,11 +24,23 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.0",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/schedule": "^6.0.1",
+    "@nestjs/swagger": "^11.2.0",
+    "@nestjs/typeorm": "^11.0.0",
+    "axios": "^1.12.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "joi": "^18.0.1",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.27"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -68,6 +84,10 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      ".*\\.module\\.ts$",
+      ".*main\\.ts$"
+    ]
   }
 }
